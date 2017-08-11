@@ -1,4 +1,4 @@
-package com.toe.peebee.classes;
+package com.sendyit.selfhelp.classes;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,9 +7,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by Wednesday on 9/14/2015.
- */
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
 
     protected OnItemClickListener listener;
