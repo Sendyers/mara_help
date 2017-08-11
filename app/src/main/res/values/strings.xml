@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PeeBee Sample</string>
+
+    //Firebase
+    <string name="firebase_url">https://torrid-fire-1380.firebaseio.com</string>
+
+</resources>

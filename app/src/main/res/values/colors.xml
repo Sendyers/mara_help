@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    //Main color palette
+    <color name="colorPrimary">#0288D1</color>
+    <color name="colorSecondary">#FF9800</color>
+    <color name="colorAccent">#FFA726</color>
+    <color name="colorStatusBar">#1976D2</color>
+
+</resources>
