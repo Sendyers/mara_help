@@ -13,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.Volley;
 import com.sendyit.selfhelp.R;
 import com.sendyit.selfhelp.adapters.CategoriesAdapter;
 import com.sendyit.selfhelp.classes.CacheRequest;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUp() {
+        queue = Volley.newRequestQueue(this);
+
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(layoutManager);
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        CacheRequest cacheRequest = new CacheRequest(0, Constants.GET_POSTS, new Response.Listener<NetworkResponse>() {
+        CacheRequest cacheRequest = new CacheRequest(0, Constants.GET_COLLECTION, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
