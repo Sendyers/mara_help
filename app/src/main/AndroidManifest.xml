@@ -21,11 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity-->
-        <!--android:name=".activities.PhoneNumber"-->
-        <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
-        <!--android:label="Phone Number"-->
-        <!--android:windowSoftInputMode="stateHidden" />-->
+        <activity
+            android:name=".activities.ArticleView"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="Article" />
     </application>
 
 </manifest>

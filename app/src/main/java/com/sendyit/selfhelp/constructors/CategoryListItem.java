@@ -5,11 +5,28 @@ import org.json.JSONObject;
 
 public class CategoryListItem {
 
+    public static final int TYPE_FINAL = 1;
+    public static final int TYPE_ARTICLE = 2;
+
     private int id;
     private String title;
     private String description;
     private String subCategories;
     private String articles;
+    private int type;
+    private String article;
+
+    public CategoryListItem(String article) {
+        try {
+            JSONObject articleJson = new JSONObject(article);
+
+            this.article = article;
+            this.title = articleJson.getString("title");
+            this.type = articleJson.getInt("type");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public CategoryListItem(JSONObject category) {
         try {
@@ -18,6 +35,7 @@ public class CategoryListItem {
             this.description = category.getString("description");
             this.subCategories = category.getString("subCategories");
             this.articles = category.getString("articles");
+            this.type = category.getInt("type");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -61,5 +79,21 @@ public class CategoryListItem {
 
     public void setArticles(String articles) {
         this.articles = articles;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getArticle() {
+        return article;
+    }
+
+    public void setArticle(String article) {
+        this.article = article;
     }
 }

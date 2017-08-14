@@ -1,10 +1,10 @@
 package com.sendyit.selfhelp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -28,7 +28,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
+
+import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_ARTICLE;
+import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_FINAL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,16 +50,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        setUpToolbar();
+        Utils.setUpToolbar(this, true);
         setUp();
-        getData();
-    }
-
-    private void setUpToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        Utils.setUpStatusBar(this);
+        getBundle();
     }
 
     private void setUp() {
@@ -73,7 +68,28 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-
+                        CategoryListItem category = categories.get(position);
+                        if (category.getType() == TYPE_ARTICLE) {
+                            Intent i = new Intent(getApplicationContext(), ArticleView.class);
+                            Bundle b = new Bundle();
+                            b.putString("article", category.getArticle());
+                            i.putExtras(b);
+                            startActivity(i);
+                        } else if (category.getType() == TYPE_FINAL) {
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("category", category.getArticles());
+                            b.putInt("type", category.getType());
+                            i.putExtras(b);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("category", category.getSubCategories());
+                            b.putInt("type", category.getType());
+                            i.putExtras(b);
+                            startActivity(i);
+                        }
                     }
 
                     @Override
@@ -88,14 +104,35 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
+    private void getBundle() {
+        try {
+            Bundle b = getIntent().getExtras();
+            if (b == null) {
+                getData();
+            } else {
+                String category = b.getString("category");
+                int type = b.getInt("type");
+                if (type == TYPE_FINAL) {
+                    processArticles(new JSONArray(category));
+                } else {
+                    processCategories(new JSONArray(category));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void getData() {
         CacheRequest cacheRequest = new CacheRequest(0, Constants.GET_COLLECTION, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {
                     final String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-                    JSONObject jsonObject = new JSONObject(jsonString);
-                    processResponse(jsonObject);
+                    JSONObject collection = new JSONObject(jsonString);
+                    JSONArray categoriesArray = collection.getJSONArray("categories");
+
+                    processCategories(categoriesArray);
                 } catch (UnsupportedEncodingException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -110,20 +147,28 @@ public class MainActivity extends AppCompatActivity {
         queue.add(cacheRequest);
     }
 
-
-    private void processResponse(JSONObject collection) {
+    private void processArticles(JSONArray articlesArray) {
         categories.clear();
 
         try {
-            JSONArray categoriesArray = collection.getJSONArray("categories");
+            for (int i = 0; i < articlesArray.length(); i++) {
+                String article = articlesArray.getString(i);
+                categories.add(new CategoryListItem(article));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        adapter.notifyDataSetChanged();
+    }
+
+    private void processCategories(JSONArray categoriesArray) {
+        categories.clear();
+
+        try {
             for (int i = 0; i < categoriesArray.length(); i++) {
                 JSONObject category = categoriesArray.getJSONObject(i);
                 categories.add(new CategoryListItem(category));
-            }
-
-            if (categories.size() > 0) {
-                Collections.reverse(categories);
             }
         } catch (JSONException e) {
             e.printStackTrace();
