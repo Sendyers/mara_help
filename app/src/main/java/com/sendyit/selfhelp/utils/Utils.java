@@ -13,7 +13,7 @@ import com.sendyit.selfhelp.R;
 
 public class Utils {
 
-    public static void setUpToolbar(AppCompatActivity activity, boolean centerText) {
+    public static Toolbar setUpToolbar(AppCompatActivity activity, boolean centerText) {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setHomeButtonEnabled(true);
@@ -31,6 +31,7 @@ public class Utils {
         }
 
         setUpStatusBar(activity);
+        return toolbar;
     }
 
     public static void setUpStatusBar(AppCompatActivity activity) {
