@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
@@ -46,19 +44,18 @@ public class MainActivity extends AppCompatActivity {
 
     //Others
     private RequestQueue queue;
-    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        Utils.setUpToolbar(this, true);
         setUp();
         getBundle();
     }
 
     private void setUp() {
-        toolbar = Utils.setUpToolbar(this, true);
         queue = Volley.newRequestQueue(this);
 
         layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -81,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                         } else if (category.getType() == TYPE_FINAL) {
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             Bundle b = new Bundle();
-                            b.putString("title", category.getTitle());
                             b.putString("category", category.getArticles());
                             b.putInt("type", category.getType());
                             i.putExtras(b);
@@ -89,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             Bundle b = new Bundle();
-                            b.putString("title", category.getTitle());
                             b.putString("category", category.getSubCategories());
                             b.putInt("type", category.getType());
                             i.putExtras(b);
@@ -116,9 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 getData();
             } else {
                 String category = b.getString("category");
-                String title = b.getString("title");
-                TextView tvToolBarText = (TextView) toolbar.findViewById(R.id.tvToolbarText);
-                tvToolBarText.setText(title);
                 int type = b.getInt("type");
                 if (type == TYPE_FINAL) {
                     processArticles(new JSONArray(category));
