@@ -14,6 +14,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,8 +28,13 @@ import org.json.JSONObject;
 
 public class ArticleView extends AppCompatActivity {
 
-    private TextView tvTitle, tvDescription;
-    private LinearLayout llActions;
+    private static int RESPONSE_TYPE_NONE = 0;
+    private static int RESPONSE_TYPE_ACTION = 1;
+    private static int RESPONSE_TYPE_FORM = 2;
+
+    private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription;
+    private Button bSubmit;
+    private LinearLayout llActions, llForm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +50,10 @@ public class ArticleView extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         llActions = (LinearLayout) findViewById(R.id.llActions);
+        llForm = (LinearLayout) findViewById(R.id.llForm);
+        tvFormTitle = (TextView) findViewById(R.id.tvFormTitle);
+        tvFormDescription = (TextView) findViewById(R.id.tvFormDescription);
+        bSubmit = (Button) findViewById(R.id.bSubmit);
     }
 
     private void getData() {
@@ -61,6 +72,23 @@ public class ArticleView extends AppCompatActivity {
             tvDescription.setText(article.getString("description"));
 
             JSONArray actions = article.getJSONArray("actions");
+            JSONObject form = article.getJSONObject("form");
+            int responseType = article.getInt("responseType");
+
+            if (responseType == RESPONSE_TYPE_ACTION) {
+                processActions(actions);
+            } else if (responseType == RESPONSE_TYPE_FORM) {
+                processForm(form);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processActions(JSONArray actions) {
+        try {
+            llActions.setVisibility(View.VISIBLE);
+
             for (int i = 0; i < actions.length(); i++) {
                 final JSONObject action = actions.getJSONObject(i);
 
@@ -77,7 +105,7 @@ public class ArticleView extends AppCompatActivity {
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(action.getString("actionUrl")));
                             startActivity(i);
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -100,6 +128,37 @@ public class ArticleView extends AppCompatActivity {
 
                 llActions.addView(textView, layoutParams);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processForm(JSONObject form) {
+        try {
+            llForm.setVisibility(View.VISIBLE);
+            bSubmit.setVisibility(View.VISIBLE);
+
+            String title = form.getString("formTitle");
+            String description = form.getString("formDescription");
+            String submitText = form.getString("submitText");
+
+            JSONArray fields = form.getJSONArray("fields");
+
+            for (int i = 0; i < fields.length(); i++) {
+                final JSONObject field = fields.getJSONObject(i);
+
+                EditText editText = new EditText(ArticleView.this);
+                editText.setId((int) System.currentTimeMillis());
+                editText.setHint(field.getString("fieldText"));
+                editText.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
+                editText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryText));
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                llForm.addView(editText, layoutParams);
+            }
+
+            tvFormTitle.setText(title);
+            tvFormDescription.setText(description);
+            bSubmit.setText(submitText);
         } catch (JSONException e) {
             e.printStackTrace();
         }

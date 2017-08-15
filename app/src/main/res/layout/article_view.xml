@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Description"
                 android:textColor="@color/colorSecondaryText"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 
@@ -70,5 +70,92 @@
         android:orientation="vertical"
         android:paddingBottom="20dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp" />
+        android:paddingRight="20dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/llForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llActions"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvFormTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Title"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvFormDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="Description"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/llFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/llForm"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorPrimary"
+        android:text="Submit"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bSubmit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:text="Was this helpful?"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/ivYes"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/ic_yes"
+            android:tint="@color/colorSecondaryText" />
+
+        <ImageView
+            android:id="@+id/ivNo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_no"
+            android:tint="@color/colorSecondaryText" />
+    </LinearLayout>
 </RelativeLayout>
