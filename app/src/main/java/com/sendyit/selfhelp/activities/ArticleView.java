@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sendyit.selfhelp.R;
 import com.sendyit.selfhelp.utils.Utils;
@@ -37,6 +39,7 @@ public class ArticleView extends AppCompatActivity {
     private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription;
     private Button bSubmit;
     private LinearLayout llActions, llForm;
+    private ImageView ivYes, ivNo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +60,22 @@ public class ArticleView extends AppCompatActivity {
         tvFormTitle = (TextView) findViewById(R.id.tvFormTitle);
         tvFormDescription = (TextView) findViewById(R.id.tvFormDescription);
         bSubmit = (Button) findViewById(R.id.bSubmit);
+        ivYes = (ImageView) findViewById(R.id.ivYes);
+        ivNo = (ImageView) findViewById(R.id.ivNo);
+
+        ivYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ArticleView.this, "Yes", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ivNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ArticleView.this, "No", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getData() {
