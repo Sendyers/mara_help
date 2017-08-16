@@ -2,6 +2,7 @@ package com.sendyit.selfhelp.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -152,6 +153,7 @@ public class ArticleView extends AppCompatActivity {
                 editText.setHint(field.getString("fieldText"));
                 editText.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
                 editText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryText));
+                editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 llForm.addView(editText, layoutParams);
             }
