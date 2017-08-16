@@ -22,6 +22,7 @@
         <activity
             android:name=".activities.ArticleView"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="Help" />
+            android:label="Help"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 </manifest>

@@ -73,48 +73,55 @@
         android:paddingRight="20dp"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/llForm"
+    <ScrollView
+        android:id="@+id/svForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/llActions"
-        android:orientation="vertical"
-        android:paddingBottom="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tvFormTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Title"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvFormDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Description"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="16sp" />
+        android:isScrollContainer="true">
 
         <LinearLayout
-            android:id="@+id/llFields"
+            android:id="@+id/llForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvFormTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Title"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvFormDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Description"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/llFields"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/bSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/llForm"
+        android:layout_below="@id/svForm"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="36dp"
