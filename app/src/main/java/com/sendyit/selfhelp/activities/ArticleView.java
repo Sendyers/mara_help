@@ -30,7 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ArticleView extends AppCompatActivity {
+public class ArticleView extends AppCompatActivity implements View.OnClickListener {
 
     private static int RESPONSE_TYPE_NONE = 0;
     private static int RESPONSE_TYPE_ACTION = 1;
@@ -63,19 +63,9 @@ public class ArticleView extends AppCompatActivity {
         ivYes = (ImageView) findViewById(R.id.ivYes);
         ivNo = (ImageView) findViewById(R.id.ivNo);
 
-        ivYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ArticleView.this, "Yes", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        ivNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ArticleView.this, "No", Toast.LENGTH_SHORT).show();
-            }
-        });
+        bSubmit.setOnClickListener(this);
+        ivYes.setOnClickListener(this);
+        ivNo.setOnClickListener(this);
     }
 
     private void getData() {
@@ -171,6 +161,7 @@ public class ArticleView extends AppCompatActivity {
 
                 EditText editText = new EditText(ArticleView.this);
                 editText.setId((int) System.currentTimeMillis());
+                editText.setTag(field.getString("fieldName"));
                 editText.setHint(field.getString("fieldText"));
                 editText.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
                 editText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryText));
@@ -184,6 +175,22 @@ public class ArticleView extends AppCompatActivity {
             bSubmit.setText(submitText);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bSubmit:
+                //Get edit texts by tag
+                Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ivYes:
+                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ivNo:
+                Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
