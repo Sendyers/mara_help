@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,6 +40,13 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     private static int RESPONSE_TYPE_NONE = 0;
     private static int RESPONSE_TYPE_ACTION = 1;
     private static int RESPONSE_TYPE_FORM = 2;
+
+    private static int ACTION_MAIN = 0;
+    private static int ACTION_PAYMENTS = 1;
+    private static int ACTION_ORDER_HISTORY = 2;
+    private static int ACTION_PREFERENCES = 3;
+    private static int ACTION_CHAT = 4;
+    private static int ACTION_EDIT_PROFILE = 5;
 
     private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
     private LinearLayout llActions, llForm;
@@ -127,6 +133,9 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                         try {
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(action.getString("actionUrl")));
+                            Bundle b = new Bundle();
+                            b.putInt("actionId", ACTION_MAIN);
+                            i.putExtras(b);
                             startActivity(i);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -190,9 +199,6 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     }
 
     private void submitForm(JSONArray formData) {
-
-        Log.d("YAYA", formData.toString());
-
         try {
             JSONObject data = new JSONObject();
             data.put("data", formData);
@@ -200,7 +206,6 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_FORM, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("YAYA", response.toString());
                     Toast.makeText(ArticleView.this, "Data submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
@@ -224,7 +229,6 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("YAYA", response.toString());
                     Toast.makeText(ArticleView.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
