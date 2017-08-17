@@ -116,8 +116,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/bSubmit"
+    <TextView
+        android:id="@+id/tvSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -126,43 +126,51 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="36dp"
         android:layout_marginTop="4dp"
-        android:background="@color/colorPrimary"
-        android:text="Submit"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
+        android:text="SUBMIT"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bSubmit"
+        android:layout_below="@id/tvSubmit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
             android:text="Was this helpful?"
             android:textColor="@color/colorSecondaryText"
             android:textSize="16sp" />
 
-        <ImageView
-            android:id="@+id/ivYes"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="12dp"
-            android:src="@drawable/ic_yes"
-            android:tint="@color/colorSecondaryText" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/ivNo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_no"
-            android:tint="@color/colorSecondaryText" />
+            <ImageView
+                android:id="@+id/ivYes"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_yes"
+                android:tint="@color/colorSecondaryText" />
+
+            <ImageView
+                android:id="@+id/ivNo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_no"
+                android:tint="@color/colorSecondaryText" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

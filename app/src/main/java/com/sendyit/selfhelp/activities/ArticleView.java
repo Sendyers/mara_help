@@ -13,17 +13,23 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.sendyit.selfhelp.R;
+import com.sendyit.selfhelp.classes.Constants;
 import com.sendyit.selfhelp.utils.Utils;
 
 import org.json.JSONArray;
@@ -36,10 +42,13 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     private static int RESPONSE_TYPE_ACTION = 1;
     private static int RESPONSE_TYPE_FORM = 2;
 
-    private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription;
-    private Button bSubmit;
+    private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
     private LinearLayout llActions, llForm;
     private ImageView ivYes, ivNo;
+
+    //Others
+    private RequestQueue queue;
+    private JSONObject form;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,17 +62,19 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setUp() {
+        queue = Volley.newRequestQueue(ArticleView.this);
+
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         llActions = (LinearLayout) findViewById(R.id.llActions);
         llForm = (LinearLayout) findViewById(R.id.llForm);
         tvFormTitle = (TextView) findViewById(R.id.tvFormTitle);
         tvFormDescription = (TextView) findViewById(R.id.tvFormDescription);
-        bSubmit = (Button) findViewById(R.id.bSubmit);
+        tvSubmit = (TextView) findViewById(R.id.tvSubmit);
         ivYes = (ImageView) findViewById(R.id.ivYes);
         ivNo = (ImageView) findViewById(R.id.ivNo);
 
-        bSubmit.setOnClickListener(this);
+        tvSubmit.setOnClickListener(this);
         ivYes.setOnClickListener(this);
         ivNo.setOnClickListener(this);
     }
@@ -84,7 +95,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             tvDescription.setText(article.getString("description"));
 
             JSONArray actions = article.getJSONArray("actions");
-            JSONObject form = article.getJSONObject("form");
+            form = article.getJSONObject("form");
             int responseType = article.getInt("responseType");
 
             if (responseType == RESPONSE_TYPE_ACTION) {
@@ -125,8 +136,8 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         super.updateDrawState(ds);
-                        ds.setUnderlineText(true);
-                        ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryText));
+                        ds.setUnderlineText(false);
+                        ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
                     }
                 };
 
@@ -148,7 +159,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     private void processForm(JSONObject form) {
         try {
             llForm.setVisibility(View.VISIBLE);
-            bSubmit.setVisibility(View.VISIBLE);
+            tvSubmit.setVisibility(View.VISIBLE);
 
             String title = form.getString("formTitle");
             String description = form.getString("formDescription");
@@ -172,7 +183,58 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
 
             tvFormTitle.setText(title);
             tvFormDescription.setText(description);
-            bSubmit.setText(submitText);
+            tvSubmit.setText(submitText);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void submitForm(JSONArray formData) {
+
+        Log.d("YAYA", formData.toString());
+
+        try {
+            JSONObject data = new JSONObject();
+            data.put("data", formData);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_FORM, data, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("YAYA", response.toString());
+                    Toast.makeText(ArticleView.this, "Data submitted.", Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void submitArticleReview(boolean isArticleHelpful) {
+        try {
+            JSONObject data = new JSONObject();
+            data.put("isArticleHelpful", isArticleHelpful);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d("YAYA", response.toString());
+                    Toast.makeText(ArticleView.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+
+            queue.add(jsonObjectRequest);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -181,15 +243,35 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bSubmit:
-                //Get edit texts by tag
-                Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
+            case R.id.tvSubmit:
+                try {
+                    boolean hasError = false;
+                    JSONArray formData = new JSONArray();
+                    JSONArray fields = form.getJSONArray("fields");
+                    for (int i = 0; i < fields.length(); i++) {
+                        JSONObject field = fields.getJSONObject(i);
+                        EditText etField = (EditText) llForm.findViewWithTag(field.getString("fieldName"));
+                        String data = etField.getText().toString().trim();
+                        if (!data.isEmpty()) {
+                            formData.put(data);
+                        } else {
+                            hasError = true;
+                            etField.setError("Please enter " + field.getString("fieldText"));
+                        }
+                    }
+
+                    if (!hasError) {
+                        submitForm(formData);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.ivYes:
-                Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show();
+                submitArticleReview(true);
                 break;
             case R.id.ivNo:
-                Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
+                submitArticleReview(false);
                 break;
         }
     }
