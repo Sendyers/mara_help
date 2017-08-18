@@ -1,3 +1,3 @@
-# Sendy Self Help Library
+# Mara Android User Help Library
 
-The Sendy self help library
+This library lets you easily add a support setion to your app.

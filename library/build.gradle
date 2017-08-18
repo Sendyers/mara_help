@@ -6,7 +6,7 @@ ext {
 
     publishedGroupId = 'com.sendyit.mara'
     libraryName = 'Mara'
-    artifact = 'Mara'
+    artifact = 'mara'
 
     libraryDescription = 'Mara user self help library by Sendy.'
 
