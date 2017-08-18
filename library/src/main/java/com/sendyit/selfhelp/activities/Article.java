@@ -33,7 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ArticleView extends AppCompatActivity implements View.OnClickListener {
+public class Article extends AppCompatActivity implements View.OnClickListener {
 
     //Actions
     private static final int RESPONSE_TYPE_ACTION = 1;
@@ -60,7 +60,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setUp() {
-        queue = Volley.newRequestQueue(ArticleView.this);
+        queue = Volley.newRequestQueue(Article.this);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
@@ -78,7 +78,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         ivNo.setOnClickListener(this);
     }
 
-    //Get article data bundled from MainActivity
+    //Get article data bundled from Help
     private void getData() {
         try {
             Bundle b = getIntent().getExtras();
@@ -133,7 +133,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                 String actionName = action.getString("actionName");
 
                 //Create clickable TextViews with links
-                TextView textView = new TextView(ArticleView.this);
+                TextView textView = new TextView(Article.this);
                 textView.setId((int) System.currentTimeMillis());
                 textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
                 textView.setText(actionName);
@@ -178,7 +178,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                 final JSONObject field = fields.getJSONObject(i);
 
                 //Create relevant EditTexts
-                EditText editText = new EditText(ArticleView.this);
+                EditText editText = new EditText(Article.this);
                 editText.setId((int) System.currentTimeMillis());
                 editText.setTag(field.getString("fieldName"));
                 editText.setHint(field.getString("fieldText"));
@@ -206,7 +206,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_FORM, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(ArticleView.this, "Data submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Article.this, "Data submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -229,7 +229,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(ArticleView.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Article.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_ARTICLE;
 import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_FINAL;
 
-public class MainActivity extends AppCompatActivity {
+public class Help extends AppCompatActivity {
 
     //Views
     private RecyclerView recyclerView;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new CategoriesAdapter(MainActivity.this, categories);
+        adapter = new CategoriesAdapter(Help.this, categories);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(),
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //If it's an article, go to Article View
                         if (category.getType() == TYPE_ARTICLE) {
-                            Intent i = new Intent(getApplicationContext(), ArticleView.class);
+                            Intent i = new Intent(getApplicationContext(), Article.class);
                             Bundle b = new Bundle();
                             b.putString("article", category.getArticle());
                             i.putExtras(b);
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //If it's a list of articles
                         } else if (category.getType() == TYPE_FINAL) {
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(), Help.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getArticles());
                             b.putInt("type", category.getType());
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //If it's a list of sub categories
                         } else {
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(), Help.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getSubCategories());
                             b.putInt("type", category.getType());
