@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.sendyit.selfhelp.R;
 import com.sendyit.selfhelp.classes.Constants;
 import com.sendyit.selfhelp.utils.Utils;
@@ -40,7 +42,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     //Views
     private LinearLayout llActions, llForm;
     private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
-    private ImageView ivYes, ivNo;
+    private ImageView ivImage, ivYes, ivNo;
 
     //Others
     private RequestQueue queue;
@@ -67,6 +69,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         tvFormTitle = (TextView) findViewById(R.id.tvFormTitle);
         tvFormDescription = (TextView) findViewById(R.id.tvFormDescription);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
+        ivImage = (ImageView) findViewById(R.id.ivImage);
         ivYes = (ImageView) findViewById(R.id.ivYes);
         ivNo = (ImageView) findViewById(R.id.ivNo);
 
@@ -89,17 +92,30 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
     //Set article data to views
     private void setData(JSONObject article) {
         try {
+            //Get article text
             tvTitle.setText(article.getString("title"));
             tvDescription.setText(article.getString("description"));
 
-            //Get intended actions
-            JSONArray actions = article.getJSONArray("actions");
-            form = article.getJSONObject("form");
+            //Get article image
+            if (article.has("image")) {
+                String image = article.getString("image");
+                if (image != null && !image.isEmpty()) {
+                    Log.d("YAYA", "Image: " + image);
+                    ivImage.setVisibility(View.VISIBLE);
+                    Glide.with(getApplicationContext()).load(image).into(ivImage);
+                }
+            }
+
+            //Get intended actions and forms
             int responseType = article.getInt("responseType");
 
-            if (responseType == RESPONSE_TYPE_ACTION) {
+            if (article.has("actions") && responseType == RESPONSE_TYPE_ACTION) {
+                JSONArray actions = article.getJSONArray("actions");
                 processActions(actions);
-            } else if (responseType == RESPONSE_TYPE_FORM) {
+            }
+
+            if (article.has("form") && responseType == RESPONSE_TYPE_FORM) {
+                form = article.getJSONObject("form");
                 processForm(form);
             }
         } catch (JSONException e) {
