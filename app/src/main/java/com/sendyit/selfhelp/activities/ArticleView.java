@@ -8,11 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,11 +33,13 @@ import org.json.JSONObject;
 
 public class ArticleView extends AppCompatActivity implements View.OnClickListener {
 
-    private static int RESPONSE_TYPE_ACTION = 1;
-    private static int RESPONSE_TYPE_FORM = 2;
+    //Actions
+    private static final int RESPONSE_TYPE_ACTION = 1;
+    private static final int RESPONSE_TYPE_FORM = 2;
 
-    private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
+    //Views
     private LinearLayout llActions, llForm;
+    private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
     private ImageView ivYes, ivNo;
 
     //Others
@@ -77,6 +75,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         ivNo.setOnClickListener(this);
     }
 
+    //Get article data bundled from MainActivity
     private void getData() {
         try {
             Bundle b = getIntent().getExtras();
@@ -87,11 +86,13 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    //Set article data to views
     private void setData(JSONObject article) {
         try {
             tvTitle.setText(article.getString("title"));
             tvDescription.setText(article.getString("description"));
 
+            //Get intended actions
             JSONArray actions = article.getJSONArray("actions");
             form = article.getJSONObject("form");
             int responseType = article.getInt("responseType");
@@ -106,22 +107,27 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    //Process clickable actions with links
     private void processActions(JSONArray actions) {
         try {
             llActions.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < actions.length(); i++) {
                 final JSONObject action = actions.getJSONObject(i);
+                String actionName = action.getString("actionName");
 
+                //Create clickable TextViews with links
                 TextView textView = new TextView(ArticleView.this);
                 textView.setId((int) System.currentTimeMillis());
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                String actionName = action.getString("actionName");
-                SpannableString spannableString = new SpannableString(actionName);
-                ClickableSpan clickableSpan = new ClickableSpan() {
+                textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                textView.setText(actionName);
+                textView.setPadding(0, 0, 0, 48);
+                textView.setTextSize(18f);
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+                textView.setHighlightColor(Color.TRANSPARENT);
+                textView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View textView) {
+                    public void onClick(View v) {
                         try {
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(action.getString("actionUrl")));
@@ -130,23 +136,9 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                             e.printStackTrace();
                         }
                     }
+                });
 
-                    @Override
-                    public void updateDrawState(TextPaint ds) {
-                        super.updateDrawState(ds);
-                        ds.setUnderlineText(false);
-                        ds.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-                    }
-                };
-
-                spannableString.setSpan(clickableSpan, 0, actionName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                textView.setText(spannableString);
-                textView.setPadding(0, 0, 0, 48);
-                textView.setTextSize(18f);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                textView.setHighlightColor(Color.TRANSPARENT);
-
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 llActions.addView(textView, layoutParams);
             }
         } catch (JSONException e) {
@@ -154,6 +146,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    //Create a from using instructions from the JSON
     private void processForm(JSONObject form) {
         try {
             llForm.setVisibility(View.VISIBLE);
@@ -168,6 +161,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
             for (int i = 0; i < fields.length(); i++) {
                 final JSONObject field = fields.getJSONObject(i);
 
+                //Create relevant EditTexts
                 EditText editText = new EditText(ArticleView.this);
                 editText.setId((int) System.currentTimeMillis());
                 editText.setTag(field.getString("fieldName"));
@@ -175,6 +169,7 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                 editText.setHintTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
                 editText.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryText));
                 editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 llForm.addView(editText, layoutParams);
             }
@@ -238,18 +233,22 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.tvSubmit:
                 try {
+                    //Get and validate data from EditTexts
                     boolean hasError = false;
+
                     JSONArray formData = new JSONArray();
                     JSONArray fields = form.getJSONArray("fields");
+
                     for (int i = 0; i < fields.length(); i++) {
                         JSONObject field = fields.getJSONObject(i);
                         EditText etField = (EditText) llForm.findViewWithTag(field.getString("fieldName"));
+
                         String data = etField.getText().toString().trim();
-                        if (!data.isEmpty()) {
+                        if (!data.isEmpty() || data.length() > 3) {
                             formData.put(data);
                         } else {
                             hasError = true;
-                            etField.setError("Please enter " + field.getString("fieldText"));
+                            etField.setError("Please enter valid " + field.getString("fieldText"));
                         }
                     }
 

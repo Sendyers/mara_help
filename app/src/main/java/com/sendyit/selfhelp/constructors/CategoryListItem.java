@@ -17,6 +17,7 @@ public class CategoryListItem {
     private String article;
 
     public CategoryListItem(String article) {
+        //This processes list of articles
         try {
             JSONObject articleJson = new JSONObject(article);
 
@@ -29,6 +30,7 @@ public class CategoryListItem {
     }
 
     public CategoryListItem(JSONObject category) {
+        //This processes lists of sub-categories
         try {
             this.id = category.getInt("id");
             this.title = category.getString("title");
