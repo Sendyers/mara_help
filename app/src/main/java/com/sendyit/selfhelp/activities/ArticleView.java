@@ -37,16 +37,8 @@ import org.json.JSONObject;
 
 public class ArticleView extends AppCompatActivity implements View.OnClickListener {
 
-    private static int RESPONSE_TYPE_NONE = 0;
     private static int RESPONSE_TYPE_ACTION = 1;
     private static int RESPONSE_TYPE_FORM = 2;
-
-    private static int ACTION_MAIN = 0;
-    private static int ACTION_PAYMENTS = 1;
-    private static int ACTION_ORDER_HISTORY = 2;
-    private static int ACTION_PREFERENCES = 3;
-    private static int ACTION_CHAT = 4;
-    private static int ACTION_EDIT_PROFILE = 5;
 
     private TextView tvTitle, tvDescription, tvFormTitle, tvFormDescription, tvSubmit;
     private LinearLayout llActions, llForm;
@@ -133,9 +125,6 @@ public class ArticleView extends AppCompatActivity implements View.OnClickListen
                         try {
                             Intent i = new Intent(Intent.ACTION_VIEW);
                             i.setData(Uri.parse(action.getString("actionUrl")));
-                            Bundle b = new Bundle();
-                            b.putInt("actionId", ACTION_MAIN);
-                            i.putExtras(b);
                             startActivity(i);
                         } catch (Exception e) {
                             e.printStackTrace();
