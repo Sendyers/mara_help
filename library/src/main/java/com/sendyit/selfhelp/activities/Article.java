@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,7 +26,6 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.sendyit.selfhelp.R;
 import com.sendyit.selfhelp.classes.Constants;
-import com.sendyit.selfhelp.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +52,7 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.article_view);
 
-        Utils.setUpToolbar(this, true);
+//        Utils.setUpToolbar(this, true);
         setUp();
         getData();
     }
@@ -78,7 +76,7 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
         ivNo.setOnClickListener(this);
     }
 
-    //Get article data bundled from Help
+    //Get article data bundled from SendyHelp
     private void getData() {
         try {
             Bundle b = getIntent().getExtras();
@@ -100,7 +98,6 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
             if (article.has("image")) {
                 String image = article.getString("image");
                 if (image != null && !image.isEmpty()) {
-                    Log.d("YAYA", "Image: " + image);
                     ivImage.setVisibility(View.VISIBLE);
                     Glide.with(getApplicationContext()).load(image).into(ivImage);
                 }
@@ -246,41 +243,37 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tvSubmit:
-                try {
-                    //Get and validate data from EditTexts
-                    boolean hasError = false;
+        if (v.getId() == R.id.tvSubmit) {
+            try {
+                //Get and validate data from EditTexts
+                boolean hasError = false;
 
-                    JSONArray formData = new JSONArray();
-                    JSONArray fields = form.getJSONArray("fields");
+                JSONArray formData = new JSONArray();
+                JSONArray fields = form.getJSONArray("fields");
 
-                    for (int i = 0; i < fields.length(); i++) {
-                        JSONObject field = fields.getJSONObject(i);
-                        EditText etField = (EditText) llForm.findViewWithTag(field.getString("fieldName"));
+                for (int i = 0; i < fields.length(); i++) {
+                    JSONObject field = fields.getJSONObject(i);
+                    EditText etField = (EditText) llForm.findViewWithTag(field.getString("fieldName"));
 
-                        String data = etField.getText().toString().trim();
-                        if (!data.isEmpty() || data.length() > 3) {
-                            formData.put(data);
-                        } else {
-                            hasError = true;
-                            etField.setError("Please enter valid " + field.getString("fieldText"));
-                        }
+                    String data = etField.getText().toString().trim();
+                    if (!data.isEmpty() || data.length() > 3) {
+                        formData.put(data);
+                    } else {
+                        hasError = true;
+                        etField.setError("Please enter valid " + field.getString("fieldText"));
                     }
-
-                    if (!hasError) {
-                        submitForm(formData);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-                break;
-            case R.id.ivYes:
-                submitArticleReview(true);
-                break;
-            case R.id.ivNo:
-                submitArticleReview(false);
-                break;
+
+                if (!hasError) {
+                    submitForm(formData);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (v.getId() == R.id.ivYes) {
+            submitArticleReview(true);
+        } else if (v.getId() == R.id.ivNo) {
+            submitArticleReview(false);
         }
     }
 

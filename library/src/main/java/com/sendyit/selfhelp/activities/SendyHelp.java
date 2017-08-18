@@ -1,5 +1,6 @@
 package com.sendyit.selfhelp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,6 @@ import com.sendyit.selfhelp.classes.CacheRequest;
 import com.sendyit.selfhelp.classes.Constants;
 import com.sendyit.selfhelp.classes.RecyclerItemClickListener;
 import com.sendyit.selfhelp.constructors.CategoryListItem;
-import com.sendyit.selfhelp.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_ARTICLE;
 import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_FINAL;
 
-public class Help extends AppCompatActivity {
+public class SendyHelp extends AppCompatActivity {
 
     //Views
     private RecyclerView recyclerView;
@@ -44,13 +44,25 @@ public class Help extends AppCompatActivity {
 
     //Others
     private RequestQueue queue;
+    private Context context;
+
+    public SendyHelp() {
+        //Default constructor
+    }
+
+    public SendyHelp(Context context, String getCollection, String postArticleReview, String postForm) {
+        this.context = context;
+        Constants.GET_COLLECTION = getCollection;
+        Constants.POST_ARTICLE_REVIEW = postArticleReview;
+        Constants.POST_FORM = postForm;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        Utils.setUpToolbar(this, true);
+//        Utils.setUpToolbar(this, true);
         setUp();
         getBundle();
     }
@@ -62,7 +74,7 @@ public class Help extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new CategoriesAdapter(Help.this, categories);
+        adapter = new CategoriesAdapter(SendyHelp.this, categories);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(),
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -78,18 +90,18 @@ public class Help extends AppCompatActivity {
                             i.putExtras(b);
                             startActivity(i);
 
-                        //If it's a list of articles
+                            //If it's a list of articles
                         } else if (category.getType() == TYPE_FINAL) {
-                            Intent i = new Intent(getApplicationContext(), Help.class);
+                            Intent i = new Intent(getApplicationContext(), SendyHelp.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getArticles());
                             b.putInt("type", category.getType());
                             i.putExtras(b);
                             startActivity(i);
 
-                        //If it's a list of sub categories
+                            //If it's a list of sub categories
                         } else {
-                            Intent i = new Intent(getApplicationContext(), Help.class);
+                            Intent i = new Intent(getApplicationContext(), SendyHelp.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getSubCategories());
                             b.putInt("type", category.getType());
@@ -183,6 +195,11 @@ public class Help extends AppCompatActivity {
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    public void showHelp() {
+        Intent i = new Intent(context, SendyHelp.class);
+        context.startActivity(i);
     }
 
     @Override
