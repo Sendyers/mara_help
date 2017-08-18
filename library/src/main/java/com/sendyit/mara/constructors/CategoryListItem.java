@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp.constructors;
+package com.sendyit.mara.constructors;
 
 import org.json.JSONException;
 import org.json.JSONObject;

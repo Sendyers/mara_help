@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp.activities;
+package com.sendyit.mara.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -24,14 +24,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.sendyit.selfhelp.R;
-import com.sendyit.selfhelp.classes.SendyHelpConstants;
+import com.sendyit.mara.R;
+import com.sendyit.mara.classes.SendyHelpConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SendyArticle extends AppCompatActivity implements View.OnClickListener {
+public class MaraArticle extends AppCompatActivity implements View.OnClickListener {
 
     //Actions
     private static final int RESPONSE_TYPE_ACTION = 1;
@@ -52,13 +52,12 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.article_view);
 
-//        Utils.setUpToolbar(this, true);
         setUp();
         getData();
     }
 
     private void setUp() {
-        queue = Volley.newRequestQueue(SendyArticle.this);
+        queue = Volley.newRequestQueue(MaraArticle.this);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
@@ -76,7 +75,7 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
         ivNo.setOnClickListener(this);
     }
 
-    //Get article data bundled from SendyHelp
+    //Get article data bundled from Mara
     private void getData() {
         try {
             Bundle b = getIntent().getExtras();
@@ -130,7 +129,7 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
                 String actionName = action.getString("actionName");
 
                 //Create clickable TextViews with links
-                TextView textView = new TextView(SendyArticle.this);
+                TextView textView = new TextView(MaraArticle.this);
                 textView.setId((int) System.currentTimeMillis());
                 textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
                 textView.setText(actionName);
@@ -175,7 +174,7 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
                 final JSONObject field = fields.getJSONObject(i);
 
                 //Create relevant EditTexts
-                EditText editText = new EditText(SendyArticle.this);
+                EditText editText = new EditText(MaraArticle.this);
                 editText.setId((int) System.currentTimeMillis());
                 editText.setTag(field.getString("fieldName"));
                 editText.setHint(field.getString("fieldText"));
@@ -203,7 +202,7 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(SendyHelpConstants.POST_FORM, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(SendyArticle.this, "Data submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MaraArticle.this, "Data submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -226,7 +225,7 @@ public class SendyArticle extends AppCompatActivity implements View.OnClickListe
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(SendyHelpConstants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(SendyArticle.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MaraArticle.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override

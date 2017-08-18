@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp.adapters;
+package com.sendyit.mara.adapters;
 
 
 import android.app.Activity;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sendyit.selfhelp.R;
-import com.sendyit.selfhelp.constructors.CategoryListItem;
+import com.sendyit.mara.R;
+import com.sendyit.mara.constructors.CategoryListItem;
 
 import java.util.ArrayList;
 

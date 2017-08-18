@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp.classes;
+package com.sendyit.mara.classes;
 
 public class SendyHelpConstants {
 

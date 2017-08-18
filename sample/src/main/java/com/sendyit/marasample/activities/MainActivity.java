@@ -1,12 +1,12 @@
-package com.sendyit.sendyhelp.sample.activities;
+package com.sendyit.marasample.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.sendyit.selfhelp.activities.SendyHelp;
+import com.sendyit.mara.activities.Mara;
 import com.sendyit.sendyhelp.R;
-import com.sendyit.sendyhelp.sample.classes.Constants;
+import com.sendyit.marasample.classes.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,8 +18,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bShowHelp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendyHelp sendyHelp = new SendyHelp(getApplicationContext(), Constants.GET_COLLECTION, Constants.POST_ARTICLE_REVIEW, Constants.POST_FORM);
-                sendyHelp.showHelp();
+                //Add end point to pull collection from, end point to post article reviews to and the end point to post form data to
+                Mara mara = new Mara(getApplicationContext(), Constants.GET_COLLECTION, Constants.POST_ARTICLE_REVIEW, Constants.POST_FORM);
+                mara.showHelp();
             }
         });
     }

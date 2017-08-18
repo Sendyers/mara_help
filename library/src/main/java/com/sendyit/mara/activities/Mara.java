@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp.activities;
+package com.sendyit.mara.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
-import com.sendyit.selfhelp.R;
-import com.sendyit.selfhelp.adapters.CategoriesAdapter;
-import com.sendyit.selfhelp.classes.CacheRequest;
-import com.sendyit.selfhelp.classes.SendyHelpConstants;
-import com.sendyit.selfhelp.classes.RecyclerItemClickListener;
-import com.sendyit.selfhelp.constructors.CategoryListItem;
+import com.sendyit.mara.R;
+import com.sendyit.mara.adapters.CategoriesAdapter;
+import com.sendyit.mara.classes.CacheRequest;
+import com.sendyit.mara.classes.SendyHelpConstants;
+import com.sendyit.mara.classes.RecyclerItemClickListener;
+import com.sendyit.mara.constructors.CategoryListItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,10 +29,10 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
-import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_ARTICLE;
-import static com.sendyit.selfhelp.constructors.CategoryListItem.TYPE_FINAL;
+import static com.sendyit.mara.constructors.CategoryListItem.TYPE_ARTICLE;
+import static com.sendyit.mara.constructors.CategoryListItem.TYPE_FINAL;
 
-public class SendyHelp extends AppCompatActivity {
+public class Mara extends AppCompatActivity {
 
     //Views
     private RecyclerView recyclerView;
@@ -46,11 +46,11 @@ public class SendyHelp extends AppCompatActivity {
     private RequestQueue queue;
     private Context context;
 
-    public SendyHelp() {
+    public Mara() {
         //Default constructor
     }
 
-    public SendyHelp(Context context, String getCollection, String postArticleReview, String postForm) {
+    public Mara(Context context, String getCollection, String postArticleReview, String postForm) {
         this.context = context;
         SendyHelpConstants.GET_COLLECTION = getCollection;
         SendyHelpConstants.POST_ARTICLE_REVIEW = postArticleReview;
@@ -62,7 +62,6 @@ public class SendyHelp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-//        Utils.setUpToolbar(this, true);
         setUp();
         getBundle();
     }
@@ -74,7 +73,7 @@ public class SendyHelp extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        adapter = new CategoriesAdapter(SendyHelp.this, categories);
+        adapter = new CategoriesAdapter(Mara.this, categories);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(),
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -82,9 +81,9 @@ public class SendyHelp extends AppCompatActivity {
                     public void onItemClick(View childView, int position) {
                         CategoryListItem category = categories.get(position);
 
-                        //If it's an article, go to SendyArticle View
+                        //If it's an article, go to MaraArticle View
                         if (category.getType() == TYPE_ARTICLE) {
-                            Intent i = new Intent(getApplicationContext(), SendyArticle.class);
+                            Intent i = new Intent(getApplicationContext(), MaraArticle.class);
                             Bundle b = new Bundle();
                             b.putString("article", category.getArticle());
                             i.putExtras(b);
@@ -92,7 +91,7 @@ public class SendyHelp extends AppCompatActivity {
 
                             //If it's a list of articles
                         } else if (category.getType() == TYPE_FINAL) {
-                            Intent i = new Intent(getApplicationContext(), SendyHelp.class);
+                            Intent i = new Intent(getApplicationContext(), Mara.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getArticles());
                             b.putInt("type", category.getType());
@@ -101,7 +100,7 @@ public class SendyHelp extends AppCompatActivity {
 
                             //If it's a list of sub categories
                         } else {
-                            Intent i = new Intent(getApplicationContext(), SendyHelp.class);
+                            Intent i = new Intent(getApplicationContext(), Mara.class);
                             Bundle b = new Bundle();
                             b.putString("category", category.getSubCategories());
                             b.putInt("type", category.getType());
@@ -198,7 +197,7 @@ public class SendyHelp extends AppCompatActivity {
     }
 
     public void showHelp() {
-        Intent i = new Intent(context, SendyHelp.class);
+        Intent i = new Intent(context, Mara.class);
         context.startActivity(i);
     }
 

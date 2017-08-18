@@ -1,4 +1,4 @@
-package com.sendyit.selfhelp;
+package com.sendyit.mara;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

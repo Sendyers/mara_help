@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sendyit.selfhelp">
+    package="com.sendyit.mara">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,11 +9,11 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.SendyHelp"
+            android:name="com.sendyit.mara.activities.Mara"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".activities.SendyArticle"
+            android:name="com.sendyit.mara.activities.MaraArticle"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan" />

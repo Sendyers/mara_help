@@ -1,4 +1,4 @@
-package com.sendyit.sendyhelp.sample.classes;
+package com.sendyit.marasample.classes;
 
 public class Constants {
 
