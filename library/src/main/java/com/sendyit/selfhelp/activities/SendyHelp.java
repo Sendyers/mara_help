@@ -18,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.sendyit.selfhelp.R;
 import com.sendyit.selfhelp.adapters.CategoriesAdapter;
 import com.sendyit.selfhelp.classes.CacheRequest;
-import com.sendyit.selfhelp.classes.Constants;
+import com.sendyit.selfhelp.classes.SendyHelpConstants;
 import com.sendyit.selfhelp.classes.RecyclerItemClickListener;
 import com.sendyit.selfhelp.constructors.CategoryListItem;
 
@@ -52,9 +52,9 @@ public class SendyHelp extends AppCompatActivity {
 
     public SendyHelp(Context context, String getCollection, String postArticleReview, String postForm) {
         this.context = context;
-        Constants.GET_COLLECTION = getCollection;
-        Constants.POST_ARTICLE_REVIEW = postArticleReview;
-        Constants.POST_FORM = postForm;
+        SendyHelpConstants.GET_COLLECTION = getCollection;
+        SendyHelpConstants.POST_ARTICLE_REVIEW = postArticleReview;
+        SendyHelpConstants.POST_FORM = postForm;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class SendyHelp extends AppCompatActivity {
                     public void onItemClick(View childView, int position) {
                         CategoryListItem category = categories.get(position);
 
-                        //If it's an article, go to Article View
+                        //If it's an article, go to SendyArticle View
                         if (category.getType() == TYPE_ARTICLE) {
-                            Intent i = new Intent(getApplicationContext(), Article.class);
+                            Intent i = new Intent(getApplicationContext(), SendyArticle.class);
                             Bundle b = new Bundle();
                             b.putString("article", category.getArticle());
                             i.putExtras(b);
@@ -144,7 +144,7 @@ public class SendyHelp extends AppCompatActivity {
 
     private void getData() {
         //Cache the data so it works offline, no need to make API calls every time
-        CacheRequest cacheRequest = new CacheRequest(0, Constants.GET_COLLECTION, new Response.Listener<NetworkResponse>() {
+        CacheRequest cacheRequest = new CacheRequest(0, SendyHelpConstants.GET_COLLECTION, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 try {

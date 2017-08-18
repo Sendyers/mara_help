@@ -25,13 +25,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.sendyit.selfhelp.R;
-import com.sendyit.selfhelp.classes.Constants;
+import com.sendyit.selfhelp.classes.SendyHelpConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Article extends AppCompatActivity implements View.OnClickListener {
+public class SendyArticle extends AppCompatActivity implements View.OnClickListener {
 
     //Actions
     private static final int RESPONSE_TYPE_ACTION = 1;
@@ -58,7 +58,7 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void setUp() {
-        queue = Volley.newRequestQueue(Article.this);
+        queue = Volley.newRequestQueue(SendyArticle.this);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
@@ -130,7 +130,7 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
                 String actionName = action.getString("actionName");
 
                 //Create clickable TextViews with links
-                TextView textView = new TextView(Article.this);
+                TextView textView = new TextView(SendyArticle.this);
                 textView.setId((int) System.currentTimeMillis());
                 textView.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
                 textView.setText(actionName);
@@ -175,7 +175,7 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
                 final JSONObject field = fields.getJSONObject(i);
 
                 //Create relevant EditTexts
-                EditText editText = new EditText(Article.this);
+                EditText editText = new EditText(SendyArticle.this);
                 editText.setId((int) System.currentTimeMillis());
                 editText.setTag(field.getString("fieldName"));
                 editText.setHint(field.getString("fieldText"));
@@ -200,10 +200,10 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
             JSONObject data = new JSONObject();
             data.put("data", formData);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_FORM, data, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(SendyHelpConstants.POST_FORM, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(Article.this, "Data submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendyArticle.this, "Data submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -223,10 +223,10 @@ public class Article extends AppCompatActivity implements View.OnClickListener {
             JSONObject data = new JSONObject();
             data.put("isArticleHelpful", isArticleHelpful);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(SendyHelpConstants.POST_ARTICLE_REVIEW, data, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(Article.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SendyArticle.this, "Feedback submitted.", Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override

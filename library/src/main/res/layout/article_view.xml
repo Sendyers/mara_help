@@ -42,7 +42,6 @@
         android:layout_below="@id/svArticle"
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/placeholder"
         android:visibility="gone" />
 
     <LinearLayout
