@@ -33,13 +33,13 @@ You must provide all of these parameters or else you will receive an error.
 
 Here's the schema for the data required from the collection end point. The collection is just a JSON object with your categories, sub-categories and articles.
 
-[JSON Schema for support data](https://github.com/IanWambai/Chowder/tree/master/files/m-pesa_developers_guide.doc).
+[JSON Schema for support data](https://github.com/sendyers/mara_help/blob/master/schema.txt).
 
 ## Data Examples
 
 Here is a sample JSON Object that Mara can consume and display. It includes actions with deeplinks and forms for feedback:
 
-[Sample JSON support data](https://github.com/IanWambai/Chowder/tree/master/files/m-pesa_developers_guide.doc).
+[Sample JSON support data](https://github.com/sendyers/mara_help/blob/master/sample_data.txt).
 
 ## Deep Links
 
